@@ -13,7 +13,7 @@ from trytond.config import config as config_
 
 B2BROUTER_PROD = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
-B2BROUTER_API_KEY = config_.get('b2brouter', 'api_key', default=None)
+B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
 B2BROUTER_BASEURL = ('https://app.b2brouter.net'
     if B2BROUTER_PROD else 'https://app-staging.b2brouter.net')
 

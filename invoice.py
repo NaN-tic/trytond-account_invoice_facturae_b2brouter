@@ -10,6 +10,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
 from trytond.config import config as config_
+from trytond.model import fields
 
 B2BROUTER_PROD = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
@@ -26,6 +27,14 @@ def basic_auth(username, password):
 
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
+
+    b2b_router_id = fields.Char('B2BRouter ID', readonly=True)
+    b2b_router_state = fields.Char('B2BRouter State', readonly=True)
+
+    @classmethod
+    def __setup__(cls):
+        super(Invoice, cls).__setup__()
+        cls._check_modify_exclude |= {'b2b_router_id', 'b2b_router_state'}
 
     def generate_facturae(self, certificate=None, service=None):
         pool = Pool()
@@ -72,6 +81,7 @@ class Invoice(metaclass=PoolMeta):
         try:
             if response.status_code == 200 or response.status_code == 201:
                 self.invoice_facturae_sent = True
+                self.b2b_router_id = response.json().get('invoice').get('id')
                 self.save()
             else:
                 _logger.warning('Error send b2brouter factura-e status code: %s %s' % (response.status_code, response.text))

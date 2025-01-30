@@ -11,6 +11,7 @@ from trytond.i18n import gettext
 from trytond.exceptions import UserError
 from trytond.config import config as config_
 from trytond.model import fields
+from datetime import timedelta
 
 B2BROUTER_PROD = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
@@ -28,7 +29,7 @@ def basic_auth(username, password):
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
-    b2b_router_id = fields.Char('B2BRouter ID', readonly=True)
+    b2b_router_id = fields.Integer('B2BRouter ID', readonly=True)
     b2b_router_state = fields.Char('B2BRouter State', readonly=True)
 
     @classmethod
@@ -51,7 +52,8 @@ class Invoice(metaclass=PoolMeta):
         super().generate_facturae(certificate, service)
 
     def send_facturae_b2brouter(self):
-        url = "{base_url}/projects/{account}/invoices/import.json".format(
+        # ?send_after_import=true
+        url = "{base_url}/projects/{account}/invoices/import.json?send_after_import=true".format(
             base_url=B2BROUTER_BASEURL,
             account=B2BROUTER_ACCOUNT,
         )
@@ -82,6 +84,7 @@ class Invoice(metaclass=PoolMeta):
             if response.status_code == 200 or response.status_code == 201:
                 self.invoice_facturae_sent = True
                 self.b2b_router_id = response.json().get('invoice').get('id')
+                self.b2b_router_state = response.json().get('invoice').get('state')
                 self.save()
             else:
                 _logger.warning('Error send b2brouter factura-e status code: %s %s' % (response.status_code, response.text))
@@ -100,6 +103,62 @@ class Invoice(metaclass=PoolMeta):
             raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter_error',
                 invoice=self.rec_name,
                 error=str(err)))
+
+    @classmethod
+    def cron_update_invoice_b2b_router_state(cls):
+        cls.update_invoice_b2b_router_state()
+
+    @classmethod
+    def update_invoice_b2b_router_state(cls):
+        Date = Pool().get('ir.date')
+        today = Date.today()
+
+        date_from = today - timedelta(days=30)
+        date_to = config_.get('b2brouter', 'date_to', default=today)
+
+        offset = 0
+        limit = 500
+        invoice_states = {}
+        while True:
+            url = "{base_url}/projects/{account}/invoices.json?offset={offset}&limit={limit}&date_from={date_from}&date_to={date_to}".format(
+            base_url=B2BROUTER_BASEURL,
+            account=B2BROUTER_ACCOUNT,
+            offset=offset,
+            limit=limit,
+            date_from=date_from,
+            date_to=date_to,
+            )
+
+            headers = {
+            "accept": "application/json",
+            "X-B2B-API-Key": B2BROUTER_API_KEY,
+            }
+
+            response = requests.get(url, headers=headers)
+            b2b_invoices = response.json().get('invoices')
+
+            if not b2b_invoices:
+                break
+
+            for b2b_invoice in b2b_invoices:
+                invoice_states[b2b_invoice.get('id')] = b2b_invoice.get('state')
+            offset += limit
+
+        invoices = cls.search([('b2b_router_id', 'in', invoice_states.keys())])
+        for invoice in invoices:
+            invoice.b2b_router_state = invoice_states[invoice.b2b_router_id]
+            if invoice_states[invoice.b2b_router_id] == 'new':
+                send_url = "{base_url}/invoices/send_invoice/{invoice_id}.json".format(
+                base_url=B2BROUTER_BASEURL,
+                invoice_id=invoice.b2b_router_id,
+                )
+                send_headers = {
+                "accept": "application/xml",
+                "X-B2B-API-Key": B2BROUTER_API_KEY,
+                }
+                requests.post(send_url, headers=send_headers)
+        cls.save(invoices)
+
 
 
 

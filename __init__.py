@@ -4,10 +4,12 @@
 from trytond.pool import Pool
 from . import configuration
 from . import invoice
+from . import cron
 
 def register():
     Pool.register(
         configuration.ConfigurationFacturae,
         invoice.Invoice,
         invoice.GenerateFacturaeStart,
+        cron.Cron,
         module='account_invoice_facturae_b2brouter', type_='model')

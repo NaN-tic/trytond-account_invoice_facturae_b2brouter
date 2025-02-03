@@ -8,6 +8,7 @@ from . import cron
 
 def register():
     Pool.register(
+        configuration.Configuration,
         configuration.ConfigurationFacturae,
         invoice.Invoice,
         invoice.GenerateFacturaeStart,

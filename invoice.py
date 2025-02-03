@@ -44,18 +44,21 @@ class Invoice(metaclass=PoolMeta):
 
         config = Configuration(1)
 
-        if self.invoice_date > Date.today() and ((service == 'b2brouter') or
-            (not service and config.facturae_service == 'b2brouter')):
+        if (self.invoice_date > Date.today() and
+                ((service == 'b2brouter') or
+                (not service and config.facturae_service == 'b2brouter'))):
             raise UserError(gettext(
                 'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_future',
                 id=self.id))
         super().generate_facturae(certificate, service)
 
     def send_facturae_b2brouter(self):
-        # ?send_after_import=true
-        url = "{base_url}/projects/{account}/invoices/import.json?send_after_import=true".format(
-            base_url=B2BROUTER_BASEURL,
-            account=B2BROUTER_ACCOUNT,
+        url = (
+            "{base_url}/projects/{account}/invoices/import.json"
+            "?send_after_import=true".format(
+                base_url=B2BROUTER_BASEURL,
+                account=B2BROUTER_ACCOUNT,
+            )
         )
 
         payload = (
@@ -70,37 +73,49 @@ class Invoice(metaclass=PoolMeta):
         try:
             response = requests.post(url, data=payload, headers=headers)
         except Exception as message:
-            _logger.warning('Error send b2brouter factura-e: %s' % self.rec_name)
-            raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
+            _logger.warning(
+                'Error send b2brouter factura-e: %s' % self.rec_name)
+            raise UserError(gettext(
+                'account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
                 invoice=self.rec_name,
                 error=message))
         except:
-            _logger.warning('Error send b2brouter factura-e: %s' % self.rec_name)
-            raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
+            _logger.warning(
+                'Error send b2brouter factura-e: %s' % self.rec_name)
+            raise UserError(gettext(
+                'account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
                 invoice=self.rec_name,
                 error=''))
 
         try:
-            if response.status_code == 200 or response.status_code == 201:
+            if response.status_code in (200, 201):
                 self.invoice_facturae_sent = True
                 self.b2b_router_id = response.json().get('invoice').get('id')
-                self.b2b_router_state = response.json().get('invoice').get('state')
+                self.b2b_router_state = response.json().get('invoice').get(
+                    'state')
                 self.save()
             else:
-                _logger.warning('Error send b2brouter factura-e status code: %s %s' % (response.status_code, response.text))
-                raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter_status',
+                _logger.warning(
+                    'Error send b2brouter factura-e status code: %s %s' % (
+                        response.status_code, response.text))
+                raise UserError(gettext(
+                    'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_status',
                     status_code=response.status_code,
                     text=response.text))
         except socket.timeout as err:
-            _logger.warning('Error send b2brouter factura-e timeout: %s' % self.rec_name)
+            _logger.warning(
+                'Error send b2brouter factura-e timeout: %s' % self.rec_name)
             _logger.error('%s' % str(err))
-            raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter_timeout',
+            raise UserError(gettext(
+                'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_timeout',
                 invoice=self.rec_name,
                 error=str(err)))
         except socket.error as err:
-            _logger.warning('Error send b2brouter factura-e: %s' % self.rec_name)
+            _logger.warning(
+                'Error send b2brouter factura-e: %s' % self.rec_name)
             _logger.error('%s' % str(err))
-            raise UserError(gettext('account_invoice_facturae_b2brouter.msg_error_send_b2brouter_error',
+            raise UserError(gettext(
+                'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_error',
                 invoice=self.rec_name,
                 error=str(err)))
 
@@ -110,23 +125,30 @@ class Invoice(metaclass=PoolMeta):
 
     @classmethod
     def update_invoice_b2b_router_state(cls):
-        Date = Pool().get('ir.date')
+        pool = Pool()
+        Date = pool.get('ir.date')
+        Config = pool.get('account.configuration')
+        config = Config(1)
         today = Date.today()
 
-        date_from = today - timedelta(days=30)
+        date_from = today - timedelta(days=config.b2b_router_state_update_days)
         date_to = config_.get('b2brouter', 'date_to', default=today)
 
         offset = 0
         limit = 500
         invoice_states = {}
         while True:
-            url = "{base_url}/projects/{account}/invoices.json?offset={offset}&limit={limit}&date_from={date_from}&date_to={date_to}".format(
-            base_url=B2BROUTER_BASEURL,
-            account=B2BROUTER_ACCOUNT,
-            offset=offset,
-            limit=limit,
-            date_from=date_from,
-            date_to=date_to,
+            url = (
+                "{base_url}/projects/{account}/invoices.json?offset={offset}"
+                "&limit={limit}&date_from={date_from}&date_to={date_to}"
+                .format(
+                    base_url=B2BROUTER_BASEURL,
+                    account=B2BROUTER_ACCOUNT,
+                    offset=offset,
+                    limit=limit,
+                    date_from=date_from,
+                    date_to=date_to,
+                )
             )
 
             headers = {
@@ -147,7 +169,7 @@ class Invoice(metaclass=PoolMeta):
         invoices = cls.search([('b2b_router_id', 'in', invoice_states.keys())])
         for invoice in invoices:
             invoice.b2b_router_state = invoice_states[invoice.b2b_router_id]
-            if invoice_states[invoice.b2b_router_id] == 'new':
+            if invoice_states[invoice.b2b_router_id] in ('new', 'sending'):
                 send_url = "{base_url}/invoices/send_invoice/{invoice_id}.json".format(
                 base_url=B2BROUTER_BASEURL,
                 invoice_id=invoice.b2b_router_id,

@@ -2,6 +2,11 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
+#, fuzzy
+msgctxt "field:account.configuration,b2b_router_state_update_days:"
+msgid "B2BRouter State Update Days"
+msgstr "B2BRouter State Update Days"
+
 msgctxt "field:account.configuration.facturae,b2b_router_state_update_days:"
 msgid "B2BRouter State Update Days"
 msgstr "B2BRouter Dies actualització estat"

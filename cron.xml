@@ -3,10 +3,10 @@
      copyright notices and license terms. -->
 <tryton>
     <data>
-        <record model="ir.cron" id="cron_update_invoice_b2b_router_state">
+        <record model="ir.cron" id="cron_update_invoice_b2brouter_state">
             <field name="interval_number" eval="1"/>
             <field name="interval_type">days</field>
-            <field name="method">account.invoice|cron_update_invoice_b2b_router_state</field>
+            <field name="method">account.invoice|cron_update_invoice_b2brouter_state</field>
         </record>
     </data>
 </tryton>

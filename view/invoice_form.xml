@@ -3,7 +3,7 @@
      copyright notices and license terms. -->
 <data>
     <xpath expr="/form/field[@name='reference']" position="after">
-        <label name="b2b_router_state"/>
-        <field name="b2b_router_state"/>
+        <label name="b2brouter_state"/>
+        <field name="b2brouter_state"/>
     </xpath>
 </data>

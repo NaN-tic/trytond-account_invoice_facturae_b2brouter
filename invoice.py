@@ -13,11 +13,11 @@ from trytond.config import config as config_
 from trytond.model import fields
 from datetime import timedelta
 
-B2BROUTER_PROD = config_.getboolean('b2brouter', 'production', default=False)
+B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
 B2BROUTER_BASEURL = ('https://app.b2brouter.net'
-    if B2BROUTER_PROD else 'https://app-staging.b2brouter.net')
+    if B2BROUTER_PRODUCTION else 'https://app-staging.b2brouter.net')
 
 _logger = getLogger(__name__)
 
@@ -29,13 +29,13 @@ def basic_auth(username, password):
 class Invoice(metaclass=PoolMeta):
     __name__ = 'account.invoice'
 
-    b2b_router_id = fields.Integer('B2BRouter ID', readonly=True)
-    b2b_router_state = fields.Char('B2BRouter State', readonly=True)
+    b2brouter_id = fields.Integer('B2BRouter ID', readonly=True)
+    b2brouter_state = fields.Char('B2BRouter State', readonly=True)
 
     @classmethod
     def __setup__(cls):
-        super(Invoice, cls).__setup__()
-        cls._check_modify_exclude |= {'b2b_router_id', 'b2b_router_state'}
+        super().__setup__()
+        cls._check_modify_exclude |= {'b2brouter_id', 'b2brouter_state'}
 
     def generate_facturae(self, certificate=None, service=None):
         pool = Pool()
@@ -90,8 +90,8 @@ class Invoice(metaclass=PoolMeta):
         try:
             if response.status_code in (200, 201):
                 self.invoice_facturae_sent = True
-                self.b2b_router_id = response.json().get('invoice').get('id')
-                self.b2b_router_state = response.json().get('invoice').get(
+                self.b2brouter_id = response.json().get('invoice').get('id')
+                self.b2brouter_state = response.json().get('invoice').get(
                     'state')
                 self.save()
             else:
@@ -100,6 +100,7 @@ class Invoice(metaclass=PoolMeta):
                         response.status_code, response.text))
                 raise UserError(gettext(
                     'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_status',
+                    invoice=self.rec_name,
                     status_code=response.status_code,
                     text=response.text))
         except socket.timeout as err:
@@ -120,18 +121,18 @@ class Invoice(metaclass=PoolMeta):
                 error=str(err)))
 
     @classmethod
-    def cron_update_invoice_b2b_router_state(cls):
-        cls.update_invoice_b2b_router_state()
+    def cron_update_invoice_b2brouter_state(cls):
+        cls.update_invoice_b2brouter_state()
 
     @classmethod
-    def update_invoice_b2b_router_state(cls):
+    def update_invoice_b2brouter_state(cls):
         pool = Pool()
         Date = pool.get('ir.date')
         Config = pool.get('account.configuration')
         config = Config(1)
         today = Date.today()
 
-        date_from = today - timedelta(days=config.b2b_router_state_update_days)
+        date_from = today - timedelta(days=config.b2brouter_state_update_days)
         date_to = config_.get('b2brouter', 'date_to', default=today)
 
         offset = 0
@@ -166,13 +167,13 @@ class Invoice(metaclass=PoolMeta):
                 invoice_states[b2b_invoice.get('id')] = b2b_invoice.get('state')
             offset += limit
 
-        invoices = cls.search([('b2b_router_id', 'in', invoice_states.keys())])
+        invoices = cls.search([('b2brouter_id', 'in', invoice_states.keys())])
         for invoice in invoices:
-            invoice.b2b_router_state = invoice_states[invoice.b2b_router_id]
-            if invoice_states[invoice.b2b_router_id] in ('new', 'sending'):
+            invoice.b2brouter_state = invoice_states[invoice.b2brouter_id]
+            if invoice_states[invoice.b2brouter_id] == 'new':
                 send_url = "{base_url}/invoices/send_invoice/{invoice_id}.json".format(
                 base_url=B2BROUTER_BASEURL,
-                invoice_id=invoice.b2b_router_id,
+                invoice_id=invoice.b2brouter_id,
                 )
                 send_headers = {
                 "accept": "application/xml",
@@ -189,5 +190,5 @@ class GenerateFacturaeStart(metaclass=PoolMeta):
 
     @classmethod
     def __setup__(cls):
-        super(GenerateFacturaeStart, cls).__setup__()
+        super().__setup__()
         cls.service.selection += [('b2brouter', 'B2BRouter')]

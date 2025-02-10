@@ -8,7 +8,7 @@ class Cron(metaclass=PoolMeta):
 
     @classmethod
     def __setup__(cls):
-        super(Cron, cls).__setup__()
+        super().__setup__()
         cls.method.selection.extend([
-            ('account.invoice|cron_update_invoice_b2b_router_state', "Update invoice B2BRouter state"),
+            ('account.invoice|cron_update_invoice_b2brouter_state', "Update invoice B2BRouter state"),
             ])

@@ -7,32 +7,32 @@ from trytond.model import fields
 class Configuration(metaclass=PoolMeta):
     __name__ = 'account.configuration'
 
-    b2b_router_state_update_days = fields.MultiValue(fields.Integer(
+    b2brouter_state_update_days = fields.MultiValue(fields.Integer(
         'B2BRouter State Update Days'))
 
     @classmethod
     def multivalue_model(cls, field):
         pool = Pool()
-        if field in {'b2b_router_state_update_days'}:
+        if field in {'b2brouter_state_update_days'}:
             return pool.get('account.configuration.facturae')
         return super().multivalue_model(field)
 
     @classmethod
-    def default_b2b_router_state_update_days(cls, **pattern):
+    def default_b2brouter_state_update_days(cls, **pattern):
         return cls.multivalue_model(
-            'b2b_router_state_update_days').default_b2b_router_state_update_days()
+            'b2brouter_state_update_days').default_b2brouter_state_update_days()
 
 class ConfigurationFacturae(metaclass=PoolMeta):
     __name__ = 'account.configuration.facturae'
 
-    b2b_router_state_update_days = fields.Integer(
+    b2brouter_state_update_days = fields.Integer(
         'B2BRouter State Update Days')
 
     @classmethod
     def __setup__(cls):
-        super(ConfigurationFacturae, cls).__setup__()
+        super().__setup__()
         cls.facturae_service.selection += [('b2brouter', 'B2BRouter')]
 
     @staticmethod
-    def default_b2b_router_state_update_days():
+    def default_b2brouter_state_update_days():
         return 30

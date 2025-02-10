@@ -4,18 +4,17 @@ this repository contains the full copyright notices and license terms. -->
 <tryton>
     <data grouped="1">
       <record model="ir.message" id="msg_error_send_b2brouter">
-          <field name="text">Error send B2Brouter factura-e %(invoice)s:
-%(error)s</field>
+          <field name="text">Error sending invoice "%(invoice)s" through B2BRouter: "%(error)s"</field>
       </record>
       <record model="ir.message" id="msg_error_send_b2brouter_status">
-          <field name="text">Error send B2Brouter factura-e status code: %(status_code)s %(text)s</field>
+          <field name="text">Error sending invoice "%(invoice)s" through B2Brouter status code: %(status_code)s %(text)s</field>
       </record>
       <record model="ir.message" id="msg_error_send_b2brouter_timeout">
-          <field name="text">Error send B2Brouter factura-e timeout %(invoice)s:
+          <field name="text">Error sending B2Brouter factura-e timeout %(invoice)s:
 %(error)s</field>
       </record>
       <record model="ir.message" id="msg_error_send_b2brouter_error">
-          <field name="text">Error send B2Brouter factura-e error %(invoice)s:
+          <field name="text">Error sending B2Brouter factura-e error %(invoice)s:
 %(error)s</field>
       </record>
       <record model="ir.message" id="msg_error_send_b2brouter_future">

@@ -2,32 +2,31 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-#, fuzzy
-msgctxt "field:account.configuration,b2b_router_state_update_days:"
+msgctxt "field:account.configuration,b2brouter_state_update_days:"
 msgid "B2BRouter State Update Days"
-msgstr "B2BRouter State Update Days"
+msgstr "Dies actualització estat B2BRouter"
 
-msgctxt "field:account.configuration.facturae,b2b_router_state_update_days:"
+msgctxt "field:account.configuration.facturae,b2brouter_state_update_days:"
 msgid "B2BRouter State Update Days"
 msgstr "B2BRouter Dies actualització estat"
 
-msgctxt "field:account.invoice,b2b_router_id:"
+msgctxt "field:account.invoice,b2brouter_id:"
 msgid "B2BRouter ID"
 msgstr "ID B2BRouter"
 
-msgctxt "field:account.invoice,b2b_router_state:"
+msgctxt "field:account.invoice,b2brouter_state:"
 msgid "B2BRouter State"
 msgstr "B2BRouter Estat"
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter"
-msgid ""
-"Error send B2Brouter factura-e %(invoice)s:\n"
-"%(error)s"
-msgstr "Error enviant B2Brouter factura-e %(invoice)s: %(error)s"
+msgid "Error sending invoice \"%(invoice)s\" through B2BRouter: \"%(error)s\""
+msgstr ""
+"Error en enviar la factura \"%(invoice)s\" a través de B2BRouter: "
+"\"%(error)s\""
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_error"
 msgid ""
-"Error send B2Brouter factura-e error %(invoice)s:\n"
+"Error sending B2Brouter factura-e error %(invoice)s:\n"
 "%(error)s"
 msgstr "Error en enviar B2Brouter factura-e error %(invoice)s: %(error)s"
 
@@ -40,14 +39,16 @@ msgstr ""
 "futur i s'enviarà automàticament."
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_status"
-msgid "Error send B2Brouter factura-e status code: %(status_code)s %(text)s"
+msgid ""
+"Error sending invoice \"%(invoice)s\" through B2Brouter status code: "
+"%(status_code)s %(text)s"
 msgstr ""
-"Error en enviar el codi d'estat factura-e de B2Brouter: %(status_code)s "
-"%(text)s"
+"S'ha produït un error en enviar la factura \"%(invoice)s\" mitjançant el "
+"codi d'estat de B2Brouter: %(status_code)s %(text)s"
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_timeout"
 msgid ""
-"Error send B2Brouter factura-e timeout %(invoice)s:\n"
+"Error sending B2Brouter factura-e timeout %(invoice)s:\n"
 "%(error)s"
 msgstr "Error en enviar B2Brouter factura-e timeout %(invoice)s: %(error)s"
 

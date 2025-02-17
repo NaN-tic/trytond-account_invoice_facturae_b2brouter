@@ -1,0 +1,65 @@
+#
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "field:account.configuration,b2brouter_state_update_days:"
+msgid "B2BRouter State Update Days"
+msgstr "Días de actualización del estado B2BRouter"
+
+msgctxt "field:account.configuration.facturae,b2brouter_state_update_days:"
+msgid "B2BRouter State Update Days"
+msgstr "B2BRouter Días de actualización del estado"
+
+msgctxt "field:account.invoice,b2brouter_id:"
+msgid "B2BRouter ID"
+msgstr "B2BRouter ID"
+
+msgctxt "field:account.invoice,b2brouter_state:"
+msgid "B2BRouter State"
+msgstr "B2BRouter estado"
+
+msgctxt "model:ir.message,text:msg_error_send_b2brouter"
+msgid "Error sending invoice \"%(invoice)s\" through B2BRouter: \"%(error)s\""
+msgstr ""
+"Error al enviar la factura \"%(invoice)s\" a través de B2BRouter: "
+"\"%(error)s\""
+
+msgctxt "model:ir.message,text:msg_error_send_b2brouter_error"
+msgid ""
+"Error sending B2Brouter factura-e error %(invoice)s:\n"
+"%(error)s"
+msgstr "Error al enviar factura-e de B2Brouter error %(invoice)s: %(error)s"
+
+msgctxt "model:ir.message,text:msg_error_send_b2brouter_future"
+msgid ""
+"Forbiden action: Invoice date of invoice %(id)s is set in the future, and it"
+" would be sent automatically."
+msgstr ""
+"Acción prohibida: la fecha de factura %(id)s se establece en el futuro y se "
+"enviará automáticamente."
+
+msgctxt "model:ir.message,text:msg_error_send_b2brouter_status"
+msgid ""
+"Error sending invoice \"%(invoice)s\" through B2Brouter status code: "
+"%(status_code)s %(text)s"
+msgstr ""
+"Error al enviar la factura \"%(invoice)s\" a través del código de estado de "
+"B2Brouter: %(status_code)s %(text)s"
+
+msgctxt "model:ir.message,text:msg_error_send_b2brouter_timeout"
+msgid ""
+"Error sending B2Brouter factura-e timeout %(invoice)s:\n"
+"%(error)s"
+msgstr "Error al enviar factura-e de B2Brouter timeout %(invoice)s: %(error)s"
+
+msgctxt "selection:account.configuration.facturae,facturae_service:"
+msgid "B2BRouter"
+msgstr "B2BRouter"
+
+msgctxt "selection:account.invoice.generate_facturae.start,service:"
+msgid "B2BRouter"
+msgstr "B2BRouter"
+
+msgctxt "selection:ir.cron,method:"
+msgid "Update invoice B2BRouter state"
+msgstr "Actualizar el estado B2BRouter de la factura"

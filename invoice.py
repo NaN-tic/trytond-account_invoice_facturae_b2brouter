@@ -149,15 +149,20 @@ class Invoice(metaclass=PoolMeta):
                     limit=limit,
                     date_from=date_from,
                     date_to=date_to,
+                    )
                 )
-            )
 
             headers = {
-            "accept": "application/json",
-            "X-B2B-API-Key": B2BROUTER_API_KEY,
-            }
+                "accept": "application/json",
+                "X-B2B-API-Key": B2BROUTER_API_KEY,
+                }
 
             response = requests.get(url, headers=headers)
+            if response.status_code != 200:
+                raise UserError(gettext(
+                    'account_invoice_facturae_b2brouter.msg_error_b2brouter',
+                    error='%s %s' % (response.status_code, response.reason),
+                    ))
             b2b_invoices = response.json().get('invoices')
 
             if not b2b_invoices:
@@ -172,13 +177,13 @@ class Invoice(metaclass=PoolMeta):
             invoice.b2brouter_state = invoice_states[invoice.b2brouter_id]
             if invoice_states[invoice.b2brouter_id] == 'new':
                 send_url = "{base_url}/invoices/send_invoice/{invoice_id}.json".format(
-                base_url=B2BROUTER_BASEURL,
-                invoice_id=invoice.b2brouter_id,
-                )
+                    base_url=B2BROUTER_BASEURL,
+                    invoice_id=invoice.b2brouter_id,
+                    )
                 send_headers = {
-                "accept": "application/xml",
-                "X-B2B-API-Key": B2BROUTER_API_KEY,
-                }
+                    "accept": "application/xml",
+                    "X-B2B-API-Key": B2BROUTER_API_KEY,
+                    }
                 requests.post(send_url, headers=send_headers)
         cls.save(invoices)
 

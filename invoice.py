@@ -3,15 +3,14 @@
 import base64
 import requests
 import socket
-
+from datetime import timedelta
 from logging import getLogger
-
+from requests.exceptions import ConnectTimeout
 from trytond.pool import Pool, PoolMeta
 from trytond.i18n import gettext
 from trytond.exceptions import UserError
 from trytond.config import config as config_
 from trytond.model import fields
-from datetime import timedelta
 
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
@@ -79,13 +78,13 @@ class Invoice(metaclass=PoolMeta):
                 'account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
                 invoice=self.rec_name,
                 error=message))
-        except:
+        except ConnectTimeout as e:
             _logger.warning(
                 'Error send b2brouter factura-e: %s' % self.rec_name)
             raise UserError(gettext(
                 'account_invoice_facturae_b2brouter.msg_error_send_b2brouter',
                 invoice=self.rec_name,
-                error=''))
+                error=str(e)))
 
         try:
             if response.status_code in (200, 201):
@@ -157,7 +156,15 @@ class Invoice(metaclass=PoolMeta):
                 "X-B2B-API-Key": B2BROUTER_API_KEY,
                 }
 
-            response = requests.get(url, headers=headers)
+            try:
+                response = requests.get(url, headers=headers)
+            except ConnectTimeout as e:
+                _logger.warning(
+                    'Error b2brouter factura-e: %s' % str(e))
+                raise UserError(gettext(
+                    'account_invoice_facturae_b2brouter.msg_error_b2brouter',
+                    error=str(e)))
+
             if response.status_code != 200:
                 raise UserError(gettext(
                     'account_invoice_facturae_b2brouter.msg_error_b2brouter',

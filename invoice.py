@@ -129,10 +129,10 @@ class Invoice(metaclass=PoolMeta):
         Date = pool.get('ir.date')
         Config = pool.get('account.configuration')
         config = Config(1)
-        today = Date.today()
 
+        today = Date.today()
         date_from = today - timedelta(days=config.b2brouter_state_update_days)
-        date_to = config_.get('b2brouter', 'date_to', default=today)
+        date_to = today
 
         offset = 0
         limit = 500

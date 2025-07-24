@@ -48,7 +48,7 @@ class Invoice(metaclass=PoolMeta):
                 (not service and config.facturae_service == 'b2brouter'))):
             raise UserError(gettext(
                 'account_invoice_facturae_b2brouter.msg_error_send_b2brouter_future',
-                id=self.id))
+                invoice=self.rec_name))
         super().generate_facturae(certificate, service)
 
     def send_facturae_b2brouter(self):
@@ -57,17 +57,17 @@ class Invoice(metaclass=PoolMeta):
             "?send_after_import=true".format(
                 base_url=B2BROUTER_BASEURL,
                 account=B2BROUTER_ACCOUNT,
+                )
             )
-        )
 
         payload = (
             "data:application/octet-stream;name=facturae-20250131.xsig;base64," +
             base64.b64encode(self.invoice_facturae).decode('utf-8')
-        )
+            )
         headers = {
             "content-type": "application/octet-stream",
             "X-B2B-API-Key": B2BROUTER_API_KEY,
-        }
+            }
 
         try:
             response = requests.post(url, data=payload, headers=headers)
@@ -193,8 +193,6 @@ class Invoice(metaclass=PoolMeta):
                     }
                 requests.post(send_url, headers=send_headers)
         cls.save(invoices)
-
-
 
 
 class GenerateFacturaeStart(metaclass=PoolMeta):

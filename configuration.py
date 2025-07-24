@@ -22,6 +22,7 @@ class Configuration(metaclass=PoolMeta):
         return cls.multivalue_model(
             'b2brouter_state_update_days').default_b2brouter_state_update_days()
 
+
 class ConfigurationFacturae(metaclass=PoolMeta):
     __name__ = 'account.configuration.facturae'
 

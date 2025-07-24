@@ -2,7 +2,9 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/field[@name='reference']" position="after">
+    <xpath expr="/form/notebook/page[@id='facturae']/field[@name='receiver_contract_reference']" position="after">
+        <label name="b2brouter_id"/>
+        <field name="b2brouter_id"/>
         <label name="b2brouter_state"/>
         <field name="b2brouter_state"/>
     </xpath>

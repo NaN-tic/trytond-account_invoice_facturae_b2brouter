@@ -21,7 +21,7 @@ this repository contains the full copyright notices and license terms. -->
 %(error)s</field>
       </record>
       <record model="ir.message" id="msg_error_send_b2brouter_future">
-          <field name="text">Forbiden action: Invoice date of invoice %(id)s is set in the future, and it would be sent automatically.</field>
+          <field name="text">Forbiden action: Invoice date of invoice %(invoice)s is set in the future, and it would be sent automatically.</field>
       </record>
     </data>
 </tryton>

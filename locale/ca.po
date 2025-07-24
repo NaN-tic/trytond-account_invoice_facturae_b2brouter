@@ -32,10 +32,10 @@ msgstr "Error en enviar B2Brouter factura-e error %(invoice)s: %(error)s"
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_future"
 msgid ""
-"Forbiden action: Invoice date of invoice %(id)s is set in the future, and it"
+"Forbiden action: Invoice date of invoice %(invoice)s is set in the future, and it"
 " would be sent automatically."
 msgstr ""
-"Acció prohibida: la data de factura de la factura %(id)s s'estableix en el "
+"Acció prohibida: la data de factura de la factura %(invoice)s s'estableix en el "
 "futur i s'enviarà automàticament."
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_status"

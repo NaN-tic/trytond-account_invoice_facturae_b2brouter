@@ -2,21 +2,111 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "field:account.configuration,b2brouter_state_update_days:"
-msgid "B2BRouter State Update Days"
-msgstr "Dies actualització estat B2BRouter"
-
-msgctxt "field:account.configuration.facturae,b2brouter_state_update_days:"
-msgid "B2BRouter State Update Days"
-msgstr "B2BRouter Dies actualització estat"
-
 msgctxt "field:account.invoice,b2brouter_id:"
 msgid "B2BRouter ID"
 msgstr "ID B2BRouter"
 
+msgctxt "field:account.invoice,b2brouter_message:"
+msgid "B2BRouter Message"
+msgstr "Missatge B2BRouter"
+
 msgctxt "field:account.invoice,b2brouter_state:"
 msgid "B2BRouter State"
 msgstr "B2BRouter Estat"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_accepted"
+msgid "Accepted"
+msgstr "Acceptada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_allegedly_paid"
+msgid "Allegedly Paid"
+msgstr "Informada com a pagada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_annotated"
+msgid "Annotated"
+msgstr "Comptabilitzada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_annulled"
+msgid "Annulled"
+msgstr "Anul·lada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_billed"
+msgid "Billed"
+msgstr "Facturada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_closed"
+msgid "Closed"
+msgstr "Tancada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_downloaded"
+msgid "Downloaded"
+msgstr "Descarregada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_error"
+msgid "Error"
+msgstr "Error"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_expired"
+msgid "Expired"
+msgstr "Expirada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_invalid"
+msgid "Invalid"
+msgstr "Invàlida"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_new"
+msgid "New"
+msgstr "Nova"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_ocr_failed"
+msgid "OCR Failed"
+msgstr "Error de OCR"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_paid"
+msgid "Paid"
+msgstr "Pagada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_performing_ocr"
+msgid "Performing OCR"
+msgstr "Processant arxiu"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_read"
+msgid "Read"
+msgstr "Llegida"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_received"
+msgid "Received"
+msgstr "Rebuda"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_refused"
+msgid "Refused"
+msgstr "Refusada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_registered"
+msgid "Registered"
+msgstr "Registrada"
+
+msgctxt "model:ir.message,text:msg_b2brouter_state_sent"
+msgid "Sent"
+msgstr "Enviada"
+
+msgctxt "model:ir.message,text:msg_error_b2brouter"
+msgid "Error B2BRouter: \"%(error)s\""
+msgstr "Error B2BRouter: \"%(error)s\""
+
+msgctxt "model:ir.message,text:msg_error_delete_b2brouter"
+msgid "Error deleting invoice \"%(invoice)s\" through B2BRouter: \"%(error)s\""
+msgstr ""
+"Error en suprimir la factura \"%(invoice)s\" a través de B2BRouter: "
+"\"%(error)s\""
+
+msgctxt "model:ir.message,text:msg_error_no_certificate"
+msgid ""
+"To forward an invoice, need to deffine a default certificate in account "
+"configuration."
+msgstr ""
+"Per reenviar una factura, cal definir un certificat per defecte a la "
+"configuració del compte."
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter"
 msgid "Error sending invoice \"%(invoice)s\" through B2BRouter: \"%(error)s\""
@@ -32,11 +122,11 @@ msgstr "Error en enviar B2Brouter factura-e error %(invoice)s: %(error)s"
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_future"
 msgid ""
-"Forbiden action: Invoice date of invoice %(invoice)s is set in the future, and it"
-" would be sent automatically."
+"Forbiden action: Invoice date of invoice %(invoice)s is set in the future, "
+"and it would be sent automatically."
 msgstr ""
-"Acció prohibida: la data de factura de la factura %(invoice)s s'estableix en el "
-"futur i s'enviarà automàticament."
+"Acció prohibida: la data de factura de la factura %(invoice)s s'estableix en"
+" el futur i s'enviarà automàticament."
 
 msgctxt "model:ir.message,text:msg_error_send_b2brouter_status"
 msgid ""
@@ -52,9 +142,13 @@ msgid ""
 "%(error)s"
 msgstr "Error en enviar B2Brouter factura-e timeout %(invoice)s: %(error)s"
 
-msgctxt "selection:account.configuration.facturae,facturae_service:"
-msgid "B2BRouter"
-msgstr "B2BRouter"
+msgctxt "model:ir.model.button,string:b2brouter_forward_invoice_button"
+msgid "Forward Invoice"
+msgstr "Reenviar factura"
+
+msgctxt "model:ir.model.button,string:invoice_b2brouter_update_state_button"
+msgid "Update State"
+msgstr "Actualitza estat"
 
 msgctxt "selection:account.invoice.generate_facturae.start,service:"
 msgid "B2BRouter"

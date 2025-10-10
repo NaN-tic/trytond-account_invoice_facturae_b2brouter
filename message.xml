@@ -23,5 +23,68 @@ this repository contains the full copyright notices and license terms. -->
       <record model="ir.message" id="msg_error_send_b2brouter_future">
           <field name="text">Forbiden action: Invoice date of invoice %(invoice)s is set in the future, and it would be sent automatically.</field>
       </record>
+      <record model="ir.message" id="msg_error_no_certificate">
+          <field name="text">To forward an invoice, need to deffine a default certificate in account configuration.</field>
+      </record>
+      <record model="ir.message" id="msg_error_delete_b2brouter">
+          <field name="text">Error deleting invoice "%(invoice)s" through B2BRouter: "%(error)s"</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_new">
+        <field name="text">New</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_sent">
+        <field name="text">Sent</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_read">
+        <field name="text">Read</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_accepted">
+        <field name="text">Accepted</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_registered">
+        <field name="text">Registered</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_refused">
+        <field name="text">Refused</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_received">
+        <field name="text">Received</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_closed">
+        <field name="text">Closed</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_paid">
+        <field name="text">Paid</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_allegedly_paid">
+        <field name="text">Allegedly Paid</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_performing_ocr">
+        <field name="text">Performing OCR</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_ocr_failed">
+        <field name="text">OCR Failed</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_downloaded">
+        <field name="text">Downloaded</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_annotated">
+        <field name="text">Annotated</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_annulled">
+        <field name="text">Annulled</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_billed">
+        <field name="text">Billed</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_expired">
+        <field name="text">Expired</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_error">
+        <field name="text">Error</field>
+      </record>
+      <record model="ir.message" id="msg_b2brouter_state_invalid">
+        <field name="text">Invalid</field>
+      </record>
     </data>
 </tryton>

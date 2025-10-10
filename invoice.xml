@@ -14,5 +14,27 @@
             <field name="inherit" ref="account_invoice.invoice_view_tree"/>
             <field name="name">invoice_tree</field>
         </record>
+
+        <record model="ir.model.button" id="b2brouter_forward_invoice_button">
+            <field name="model">account.invoice</field>
+            <field name="name">b2brouter_forward_invoice</field>
+            <field name="string">Forward Invoice</field>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="forward_b2brouter_facturae_button_group_account">
+            <field name="button" ref="b2brouter_forward_invoice_button"/>
+            <field name="group" ref="account.group_account"/>
+        </record>
+
+        <record model="ir.model.button" id="invoice_b2brouter_update_state_button">
+            <field name="model">account.invoice</field>
+            <field name="name">b2brouter_update_state</field>
+            <field name="string">Update State</field>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="invoice_update_b2brouter_state_button_group_account">
+            <field name="button" ref="invoice_b2brouter_update_state_button"/>
+            <field name="group" ref="account.group_account"/>
+        </record>
     </data>
 </tryton>

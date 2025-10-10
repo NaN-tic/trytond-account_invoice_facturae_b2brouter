@@ -3,9 +3,15 @@
      copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='facturae']/field[@name='receiver_contract_reference']" position="after">
-        <label name="b2brouter_id"/>
-        <field name="b2brouter_id"/>
-        <label name="b2brouter_state"/>
-        <field name="b2brouter_state"/>
+        <group id="b2brouter" colspan="4" col="6">
+            <label name="b2brouter_id"/>
+            <field name="b2brouter_id"/>
+            <button name="b2brouter_forward_invoice" icon="tryton-refresh"/>
+            <label name="b2brouter_state"/>
+            <field name="b2brouter_state"/>
+            <button name="b2brouter_update_state" icon="tryton-refresh"/>
+            <separator name="b2brouter_message" colspan="6"/>
+            <field name="b2brouter_message" colspan="6"/>
+        </group>
     </xpath>
 </data>

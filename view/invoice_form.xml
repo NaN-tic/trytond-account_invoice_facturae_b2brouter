@@ -3,7 +3,7 @@
      copyright notices and license terms. -->
 <data>
     <xpath expr="/form/notebook/page[@id='facturae']/field[@name='receiver_contract_reference']" position="after">
-        <group id="b2brouter">
+        <group id="b2brouter" colspan="4" col="4">
             <label name="b2brouter_id"/>
             <field name="b2brouter_id"/>
             <label name="b2brouter_state"/>

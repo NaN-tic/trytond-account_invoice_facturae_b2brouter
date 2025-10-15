@@ -143,8 +143,12 @@ msgid ""
 msgstr "Error en enviar B2Brouter factura-e timeout %(invoice)s: %(error)s"
 
 msgctxt "model:ir.model.button,string:b2brouter_forward_invoice_button"
-msgid "Forward Invoice"
-msgstr "Reenviar factura"
+msgid "Forward eInvoice"
+msgstr "Reenviar factura-e"
+
+msgctxt "model:ir.model.button,string:b2brouter_reset_invoice_button"
+msgid "Reset eInvoice"
+msgstr "Restablir factura-e"
 
 msgctxt "model:ir.model.button,string:invoice_b2brouter_update_state_button"
 msgid "Update State"

@@ -86,6 +86,10 @@ msgctxt "model:ir.message,text:msg_b2brouter_state_registered"
 msgid "Registered"
 msgstr "Registrada"
 
+msgctxt "model:ir.message,text:msg_b2brouter_state_sending"
+msgid "Sending"
+msgstr "Enviant"
+
 msgctxt "model:ir.message,text:msg_b2brouter_state_sent"
 msgid "Sent"
 msgstr "Enviada"

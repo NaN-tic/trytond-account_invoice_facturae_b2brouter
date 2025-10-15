@@ -35,6 +35,9 @@ this repository contains the full copyright notices and license terms. -->
       <record model="ir.message" id="msg_b2brouter_state_sent">
         <field name="text">Sent</field>
       </record>
+      <record model="ir.message" id="msg_b2brouter_state_sending">
+        <field name="text">Sending</field>
+      </record>
       <record model="ir.message" id="msg_b2brouter_state_read">
         <field name="text">Read</field>
       </record>

@@ -214,55 +214,14 @@ class Invoice(metaclass=PoolMeta):
                 'account_invoice_facturae_b2brouter.msg_b2brouter_state_' +
                 invoice_states[invoice.b2brouter_id])
             if invoice_states[invoice.b2brouter_id] == 'new':
-                send_url = ("{base_url}/invoices/send_invoice/"
-                    "{invoice_id}.json".format(
-                    base_url=B2BROUTER_BASEURL,
-                    invoice_id=invoice.b2brouter_id,
-                    ))
-                send_headers = {
-                    "accept": "application/xml",
-                    "X-B2B-API-Key": B2BROUTER_API_KEY,
-                    }
-                try:
-                    response = requests.post(send_url, headers=send_headers)
-                    if response.status_code == 204:
-                        invoice.invoice_facturae_sent = True
-                        invoice.save()
-                    else:
-                        invoice.b2brouter_state = gettext(
-                            'account_invoice_facturae_b2brouter.'
-                            'msg_b2brouter_state_error')
-                        invoice.b2brouter_message = (
-                            str(response.status_code) + "\n"
-                            + (response.text
-                                if response.text else response.reason))
-                        invoice.save()
-                        Transaction().commit()
-                        _logger.warning(
-                            'Error send b2brouter factura-e status code:'
-                            ' %s %s' % (
-                                response.status_code, response.text))
-                        raise UserError(gettext(
-                                'account_invoice_facturae_b2brouter.'
-                                'msg_error_send_b2brouter_status',
-                                invoice=invoice.rec_name,
-                                status_code=response.status_code,
-                                text=invoice.b2brouter_message))
-                except Exception as e:
-                    _logger.warning('Error send b2brouter factura-e: %s'
-                        % invoice.rec_name)
-                    raise UserError(gettext(
-                            'account_invoice_facturae_b2brouter.'
-                            'msg_error_send_b2brouter',
-                            invoice=invoice.rec_name,
-                            error=str(e)))
+                invoice.b2brouter_send_invoice()
             elif invoice_states[invoice.b2brouter_id] in ('refused', 'error'):
                 send_url = "{base_url}/invoices/{invoice_id}.json".format(
                     base_url=B2BROUTER_BASEURL,
                     invoice_id=invoice.b2brouter_id,
                     )
                 send_headers = {
-                    "accept": "application/xml",
+                    "accept": "application/json",
                     "X-B2B-API-Key": B2BROUTER_API_KEY,
                     }
                 try:
@@ -307,11 +266,11 @@ class Invoice(metaclass=PoolMeta):
                             error=str(e)))
         cls.save(invoices)
 
-    def b2brouter_send_invoice(self, b2brouter_id):
+    def b2brouter_send_invoice(self):
         url = (
-            "{base_url}/projects/invoices/send_invoice/{id}.json".format(
+            "{base_url}/invoices/send_invoice/{id}.json".format(
                 base_url=B2BROUTER_BASEURL,
-                id=b2brouter_id,
+                id=self.b2brouter_id,
                 )
             )
         headers = {
@@ -373,7 +332,7 @@ class Invoice(metaclass=PoolMeta):
 
     def b2brouter_delete_invoice(self):
         url = (
-            "{base_url}/projects/invoices/{id}.json".format(
+            "{base_url}/invoices/{id}.json".format(
                 base_url=B2BROUTER_BASEURL,
                 id=self.b2brouter_id,
                 )

@@ -42,6 +42,10 @@ class Invoice(metaclass=PoolMeta):
             'b2brouter_message'}
 
         cls._buttons.update({
+                'b2brouter_reset_invoice': {
+                    'invisible': ~Eval('b2brouter_id', False),
+                    'depends': ['b2brouter_id'],
+                    },
                 'b2brouter_forward_invoice': {
                     'invisible': ~Eval('b2brouter_id', False),
                     'depends': ['b2brouter_id'],
@@ -434,7 +438,7 @@ class Invoice(metaclass=PoolMeta):
 
     @classmethod
     @ModelView.button
-    def b2brouter_forward_invoice(cls, invoices):
+    def b2brouter_reset_invoice(cls, invoices):
         pool = Pool()
         Configuration = pool.get('account.configuration')
 
@@ -455,6 +459,13 @@ class Invoice(metaclass=PoolMeta):
                 invoice.send_facturae_b2brouter()
         if to_save:
             cls.save(to_save)
+
+    @classmethod
+    @ModelView.button
+    def b2brouter_forward_invoice(cls, invoices):
+        for invoice in invoices:
+            if invoice.b2brouter_id:
+                invoice.b2brouter_send_invoice()
 
     @classmethod
     @ModelView.button

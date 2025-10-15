@@ -15,10 +15,21 @@
             <field name="name">invoice_tree</field>
         </record>
 
+        <record model="ir.model.button" id="b2brouter_reset_invoice_button">
+            <field name="model">account.invoice</field>
+            <field name="name">b2brouter_reset_invoice</field>
+            <field name="string">Reset eInvoice</field>
+        </record>
+        <record model="ir.model.button-res.group"
+            id="reset_b2brouter_facturae_button_group_account">
+            <field name="button" ref="b2brouter_reset_invoice_button"/>
+            <field name="group" ref="account.group_account"/>
+        </record>
+
         <record model="ir.model.button" id="b2brouter_forward_invoice_button">
             <field name="model">account.invoice</field>
             <field name="name">b2brouter_forward_invoice</field>
-            <field name="string">Forward Invoice</field>
+            <field name="string">Forward eInvoice</field>
         </record>
         <record model="ir.model.button-res.group"
             id="forward_b2brouter_facturae_button_group_account">

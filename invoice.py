@@ -3,7 +3,6 @@
 import base64
 import requests
 import socket
-from datetime import timedelta
 from logging import getLogger
 from requests.exceptions import ConnectTimeout
 from trytond.pool import Pool, PoolMeta

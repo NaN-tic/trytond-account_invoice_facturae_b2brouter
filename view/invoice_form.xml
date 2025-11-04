@@ -2,8 +2,8 @@
 <!-- The COPYRIGHT file at the top level of this repository contains the full
      copyright notices and license terms. -->
 <data>
-    <xpath expr="/form/notebook/page[@id='facturae']/field[@name='receiver_contract_reference']" position="after">
-        <group id="b2brouter" colspan="4" col="4">
+  <xpath expr="/form/notebook/page[@id='facturae']/group[@id='facturae_state_information']/field[@name='invoice_facturae_sent']" position="after">
+        <group id="facturae_b2brouter_information" string="B2Brouter Information" colspan="4" col="4">
             <label name="b2brouter_id"/>
             <field name="b2brouter_id"/>
             <label name="b2brouter_state"/>

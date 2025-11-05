@@ -359,6 +359,9 @@ class Invoice(metaclass=PoolMeta):
                 self.b2brouter_state = None
                 self.b2brouter_message = None
                 self.save()
+            elif response.status_code == 404:
+                # Invoice not found
+                pass
             else:
                 self.b2brouter_state = gettext(
                     'account_invoice_facturae_b2brouter.'

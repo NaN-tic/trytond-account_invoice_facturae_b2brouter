@@ -353,6 +353,7 @@ class Invoice(metaclass=PoolMeta):
                     error=str(e)))
 
         try:
+            self.invoice_facturae = None
             if response.status_code == 204:
                 self.b2brouter_id = None
                 self.b2brouter_state = None
@@ -403,18 +404,17 @@ class Invoice(metaclass=PoolMeta):
         to_save = []
         for invoice in invoices:
             if invoice.b2brouter_id:
-                config = Configuration(1)
-                certificate = config.facturae_certificate
-                if not certificate:
-                    raise UserError(gettext(
-                            'account_invoice_facturae_b2brouter.'
-                            'msg_error_no_certificate'))
-                invoice.invoice_facturae = None
-                invoice.generate_facturae(certificate=certificate,
-                    service='only_file')
-                to_save.append(invoice)
                 invoice.b2brouter_delete_invoice()
-                invoice.send_facturae_b2brouter()
+            config = Configuration(1)
+            certificate = config.facturae_certificate
+            if not certificate:
+                raise UserError(gettext(
+                        'account_invoice_facturae_b2brouter.'
+                        'msg_error_no_certificate'))
+            invoice.generate_facturae(certificate=certificate,
+                service='only_file')
+            to_save.append(invoice)
+            invoice.send_facturae_b2brouter()
         if to_save:
             cls.save(to_save)
 

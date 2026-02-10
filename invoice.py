@@ -13,6 +13,7 @@ from trytond.config import config as config_
 from trytond.model import fields, ModelView
 from trytond.transaction import Transaction
 
+PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
@@ -404,6 +405,9 @@ class Invoice(metaclass=PoolMeta):
         pool = Pool()
         Configuration = pool.get('account.configuration')
 
+        if not PRODUCTION_ENV:
+            return
+
         to_save = []
         for invoice in invoices:
             if invoice.b2brouter_id:
@@ -424,6 +428,9 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     @ModelView.button
     def b2brouter_forward_invoice(cls, invoices):
+        if not PRODUCTION_ENV:
+            return
+
         for invoice in invoices:
             if invoice.b2brouter_id:
                 invoice.b2brouter_send_invoice()
@@ -431,6 +438,9 @@ class Invoice(metaclass=PoolMeta):
     @classmethod
     @ModelView.button
     def b2brouter_update_state(cls, invoices):
+        if not PRODUCTION_ENV:
+            return
+
         for invoice in invoices:
             cls.update_invoice_b2brouter_state(number=invoice.number)
 

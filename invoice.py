@@ -9,7 +9,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.i18n import gettext
 from trytond.pyson import Eval
 from trytond.exceptions import UserError
-from trytond.config import config as config_
+import trytond.config as config_
 from trytond.model import fields, ModelView
 from trytond.transaction import Transaction
 

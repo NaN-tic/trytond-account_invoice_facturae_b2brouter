@@ -11,7 +11,7 @@ from trytond.pyson import Eval
 from trytond.exceptions import UserError
 import trytond.config as config_
 from trytond.model import fields, ModelView
-from trytond.transaction import Transaction
+from trytond.transaction import Transaction, without_check_access
 
 PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
@@ -105,14 +105,16 @@ class Invoice(metaclass=PoolMeta):
                 self.b2brouter_state = gettext(
                     'account_invoice_facturae_b2brouter.msg_b2brouter_state_' +
                     response.json().get('invoice').get('state'))
-                self.save()
+                with without_check_access():
+                    self.save()
             else:
                 self.b2brouter_state = gettext(
                     'account_invoice_facturae_b2brouter.'
                     'msg_b2brouter_state_error')
                 self.b2brouter_message = (str(response.status_code) + "\n"
                     + (response.text if response.text else response.reason))
-                self.save()
+                with without_check_access():
+                    self.save()
                 Transaction().commit()
                 _logger.warning(
                     'Error send b2brouter factura-e status code: %s %s' % (
@@ -244,7 +246,8 @@ class Invoice(metaclass=PoolMeta):
                             str(response.status_code) + "\n"
                             + (response.text
                                 if response.text else response.reason))
-                        invoice.save()
+                        with without_check_access():
+                            invoice.save()
                         Transaction().commit()
                         _logger.warning(
                             'Error send b2brouter factura-e status code:'
@@ -264,7 +267,8 @@ class Invoice(metaclass=PoolMeta):
                             'msg_error_send_b2brouter',
                             invoice=invoice.rec_name,
                             error=str(e)))
-        cls.save(invoices)
+        with without_check_access():
+            cls.save(invoices)
 
     def b2brouter_send_invoice(self):
         url = (
@@ -293,14 +297,16 @@ class Invoice(metaclass=PoolMeta):
         try:
             if response.status_code == 204:
                 self.invoice_facturae_sent = True
-                self.save()
+                with without_check_access():
+                    self.save()
             else:
                 self.b2brouter_state = gettext(
                     'account_invoice_facturae_b2brouter.'
                     'msg_b2brouter_state_error')
                 self.b2brouter_message = (str(response.status_code) + "\n"
                     + (response.text if response.text else response.reason))
-                self.save()
+                with without_check_access():
+                    self.save()
                 Transaction().commit()
                 _logger.warning(
                     'Error send b2brouter factura-e status code: %s %s' % (
@@ -359,7 +365,8 @@ class Invoice(metaclass=PoolMeta):
                 self.b2brouter_id = None
                 self.b2brouter_state = None
                 self.b2brouter_message = None
-                self.save()
+                with without_check_access():
+                    self.save()
             elif response.status_code == 404:
                 # Invoice not found
                 pass
@@ -369,7 +376,8 @@ class Invoice(metaclass=PoolMeta):
                     'msg_b2brouter_state_error')
                 self.b2brouter_message = (str(response.status_code) + "\n"
                     + (response.text if response.text else response.reason))
-                self.save()
+                with without_check_access():
+                    self.save()
                 Transaction().commit()
                 _logger.warning(
                     'Error send b2brouter factura-e status code: %s %s' % (

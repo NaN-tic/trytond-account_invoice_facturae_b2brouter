@@ -1,7 +1,7 @@
 import requests
 
-url = "https://app-staging.b2brouter.net/users/invoice_states.json"
-#url = "https://app.b2brouter.net/users/invoice_states.json"
+url = "https://app-staging.b2brouter.net/invoice_states"
+#url = "https://app.b2brouter.net/invoice_states"
 
 headers = {
     "accept": "application/json",

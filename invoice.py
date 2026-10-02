@@ -17,8 +17,8 @@ PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
-B2BROUTER_BASEURL = ('https://app.b2brouter.net'
-    if B2BROUTER_PRODUCTION else 'https://app-staging.b2brouter.net')
+B2BROUTER_BASEURL = ('https://api.b2brouter.net'
+    if B2BROUTER_PRODUCTION else 'https://api-staging.b2brouter.net')
 
 _logger = getLogger(__name__)
 
@@ -72,7 +72,7 @@ class Invoice(metaclass=PoolMeta):
 
     def send_facturae_b2brouter(self):
         url = (
-            "{base_url}/projects/{account}/invoices/import.json"
+            "{base_url}/accounts/{account}/invoices/import"
             "?send_after_import=true&issued=true".format(
                 base_url=B2BROUTER_BASEURL,
                 account=B2BROUTER_ACCOUNT,
@@ -154,7 +154,7 @@ class Invoice(metaclass=PoolMeta):
         while True:
             if number:
                 url = (
-                    "{base_url}/projects/{account}/invoices.json?number={number}"
+                    "{base_url}/accounts/{account}/invoices?number={number}"
                     .format(
                         base_url=B2BROUTER_BASEURL,
                         account=B2BROUTER_ACCOUNT,
@@ -163,7 +163,7 @@ class Invoice(metaclass=PoolMeta):
                     )
             else:
                 url = (
-                    "{base_url}/projects/{account}/invoices.json?offset={offset}"
+                    "{base_url}/accounts/{account}/invoices?offset={offset}"
                     "&limit={limit}&paid=0&closed=0"
                     .format(
                         base_url=B2BROUTER_BASEURL,
@@ -216,7 +216,7 @@ class Invoice(metaclass=PoolMeta):
             if invoice_states[invoice.b2brouter_id] == 'new':
                 invoice.b2brouter_send_invoice()
             elif invoice_states[invoice.b2brouter_id] in ('refused', 'error'):
-                send_url = "{base_url}/invoices/{invoice_id}.json".format(
+                send_url = "{base_url}/invoices/{invoice_id}".format(
                     base_url=B2BROUTER_BASEURL,
                     invoice_id=invoice.b2brouter_id,
                     )
@@ -268,7 +268,7 @@ class Invoice(metaclass=PoolMeta):
 
     def b2brouter_send_invoice(self):
         url = (
-            "{base_url}/invoices/send_invoice/{id}.json".format(
+            "{base_url}/invoices/send_invoice/{id}".format(
                 base_url=B2BROUTER_BASEURL,
                 id=self.b2brouter_id,
                 )
@@ -332,7 +332,7 @@ class Invoice(metaclass=PoolMeta):
 
     def b2brouter_delete_invoice(self):
         url = (
-            "{base_url}/invoices/{id}.json".format(
+            "{base_url}/invoices/{id}".format(
                 base_url=B2BROUTER_BASEURL,
                 id=self.b2brouter_id,
                 )

@@ -194,7 +194,8 @@ class Invoice(metaclass=PoolMeta):
                         'msg_error_b2brouter',
                         error='%s %s' % (response.status_code,
                             response.reason)))
-            b2b_invoices = response.json().get('invoices')
+            data = response.json()
+            b2b_invoices = data.get('invoices')
 
             if not b2b_invoices:
                 break
@@ -202,9 +203,15 @@ class Invoice(metaclass=PoolMeta):
             for b2b_invoice in b2b_invoices:
                 invoice_states[b2b_invoice.get('id')] = b2b_invoice.get(
                     'state')
-            offset += limit
-
             if number:
+                break
+
+            meta = data['meta']
+            total_count = meta['total_count']
+            offset = meta['offset']
+            limit = meta['limit']
+            offset += limit
+            if offset >= total_count:
                 break
 
         invoices = cls.search([('b2brouter_id', 'in', invoice_states.keys())])

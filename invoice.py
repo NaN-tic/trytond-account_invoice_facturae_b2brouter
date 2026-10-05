@@ -17,7 +17,7 @@ PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
-B2BROUTER_API_VERSION = '2025-10-13'
+B2BROUTER_API_VERSION = '2026-03-02'
 B2BROUTER_BASEURL = ('https://api.b2brouter.net'
     if B2BROUTER_PRODUCTION else 'https://api-staging.b2brouter.net')
 

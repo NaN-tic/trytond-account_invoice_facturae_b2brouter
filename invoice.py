@@ -245,8 +245,8 @@ class Invoice(metaclass=PoolMeta):
                             invoice.b2brouter_message = b2b_invoice.get(
                                 'refuse_reason')
                         else:
-                            invoice.b2brouter_message = "\n".join(
-                                b2b_invoice.get('errors'))
+                            invoice.b2brouter_message = b2b_invoice.get(
+                                'error_message')
                     elif response.status_code == 302:
                         invoice.b2brouter_message = (
                             str(response.status_code) + "\n"

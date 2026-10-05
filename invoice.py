@@ -21,6 +21,16 @@ B2BROUTER_API_VERSION = '2026-06-26'
 B2BROUTER_BASEURL = ('https://api.b2brouter.net'
     if B2BROUTER_PRODUCTION else 'https://api-staging.b2brouter.net')
 
+B2BROUTER_HEADERS = {
+    'accept': 'application/json',
+    'X-B2B-API-Key': B2BROUTER_API_KEY,
+    'X-B2B-API-Version': B2BROUTER_API_VERSION,
+    }
+B2BROUTER_POST_HEADERS = {
+    **B2BROUTER_HEADERS,
+    'content-type': 'application/octet-stream',
+    }
+
 _logger = getLogger(__name__)
 
 def basic_auth(username, password):
@@ -83,15 +93,9 @@ class Invoice(metaclass=PoolMeta):
             "data:application/octet-stream;name=facturae-20250131.xsig;base64," +
             base64.b64encode(self.invoice_facturae).decode('utf-8')
             )
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/octet-stream",
-            "X-B2B-API-Key": B2BROUTER_API_KEY,
-            "X-B2B-API-Version": B2BROUTER_API_VERSION,
-            }
-
         try:
-            response = requests.post(url, data=payload, headers=headers)
+            response = requests.post(url, data=payload,
+                headers=B2BROUTER_POST_HEADERS)
         except Exception as e:
             _logger.warning(
                 'Error send b2brouter factura-e: %s' % self.rec_name)
@@ -176,14 +180,8 @@ class Invoice(metaclass=PoolMeta):
                         )
                     )
 
-            headers = {
-                "accept": "application/json",
-                "X-B2B-API-Key": B2BROUTER_API_KEY,
-                "X-B2B-API-Version": B2BROUTER_API_VERSION,
-                }
-
             try:
-                response = requests.get(url, headers=headers)
+                response = requests.get(url, headers=B2BROUTER_HEADERS)
             except ConnectTimeout as e:
                 _logger.warning(
                     'Error b2brouter factura-e: %s' % str(e))
@@ -234,13 +232,9 @@ class Invoice(metaclass=PoolMeta):
                     base_url=B2BROUTER_BASEURL,
                     invoice_id=invoice.b2brouter_id,
                     )
-                send_headers = {
-                    "accept": "application/json",
-                    "X-B2B-API-Key": B2BROUTER_API_KEY,
-                    "X-B2B-API-Version": B2BROUTER_API_VERSION,
-                    }
                 try:
-                    response = requests.get(send_url, headers=send_headers)
+                    response = requests.get(send_url,
+                        headers=B2BROUTER_HEADERS)
                     if response.status_code == 200:
                         b2b_invoice = response.json().get('invoice')
                         if invoice_states[invoice.b2brouter_id] == 'refused':
@@ -288,15 +282,8 @@ class Invoice(metaclass=PoolMeta):
                 id=self.b2brouter_id,
                 )
             )
-        headers = {
-            "accept": "application/json",
-            "content-type": "application/octet-stream",
-            "X-B2B-API-Key": B2BROUTER_API_KEY,
-            "X-B2B-API-Version": B2BROUTER_API_VERSION,
-            }
-
         try:
-            response = requests.post(url, headers=headers)
+            response = requests.post(url, headers=B2BROUTER_POST_HEADERS)
         except Exception as e:
             _logger.warning(
                 'Error send b2brouter factura-e: %s' % self.rec_name)
@@ -359,14 +346,8 @@ class Invoice(metaclass=PoolMeta):
                 id=self.b2brouter_id,
                 )
             )
-        headers = {
-            "accept": "application/json",
-            "X-B2B-API-Key": B2BROUTER_API_KEY,
-            "X-B2B-API-Version": B2BROUTER_API_VERSION,
-            }
-
         try:
-            response = requests.delete(url, headers=headers)
+            response = requests.delete(url, headers=B2BROUTER_HEADERS)
         except Exception as e:
             _logger.warning(
                 'Error deleteing b2brouter factura-e: %s' % self.rec_name)

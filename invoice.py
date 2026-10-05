@@ -83,6 +83,7 @@ class Invoice(metaclass=PoolMeta):
             base64.b64encode(self.invoice_facturae).decode('utf-8')
             )
         headers = {
+            "accept": "application/json",
             "content-type": "application/octet-stream",
             "X-B2B-API-Key": B2BROUTER_API_KEY,
             }

@@ -151,18 +151,17 @@ class Invoice(metaclass=PoolMeta):
         cls.update_invoice_b2brouter_state()
 
     @classmethod
-    def update_invoice_b2brouter_state(cls, number=None):
+    def update_invoice_b2brouter_state(cls, b2brouter_id=None):
         offset = 0
         limit = 500
         invoice_states = {}
         while True:
-            if number:
+            if b2brouter_id:
                 url = (
-                    "{base_url}/accounts/{account}/invoices?number={number}"
+                    "{base_url}/invoices/{invoice_id}"
                     .format(
                         base_url=B2BROUTER_BASEURL,
-                        account=B2BROUTER_ACCOUNT,
-                        number=number,
+                        invoice_id=b2brouter_id,
                         )
                     )
             else:
@@ -200,7 +199,10 @@ class Invoice(metaclass=PoolMeta):
                         error='%s %s' % (response.status_code,
                             response.reason)))
             data = response.json()
-            b2b_invoices = data.get('invoices')
+            if b2brouter_id:
+                b2b_invoices = [data['invoice']]
+            else:
+                b2b_invoices = data.get('invoices')
 
             if not b2b_invoices:
                 break
@@ -208,7 +210,7 @@ class Invoice(metaclass=PoolMeta):
             for b2b_invoice in b2b_invoices:
                 invoice_states[b2b_invoice.get('id')] = b2b_invoice.get(
                     'state')
-            if number:
+            if b2brouter_id:
                 break
 
             meta = data['meta']
@@ -463,7 +465,9 @@ class Invoice(metaclass=PoolMeta):
             return
 
         for invoice in invoices:
-            cls.update_invoice_b2brouter_state(number=invoice.number)
+            if invoice.b2brouter_id:
+                cls.update_invoice_b2brouter_state(
+                    b2brouter_id=invoice.b2brouter_id)
 
 
 class GenerateFacturaeStart(metaclass=PoolMeta):

@@ -100,11 +100,12 @@ class Invoice(metaclass=PoolMeta):
 
         try:
             if response.status_code in (200, 201):
+                b2b_invoice = response.json()['invoice']
                 self.invoice_facturae_sent = True
-                self.b2brouter_id = response.json().get('invoice').get('id')
+                self.b2brouter_id = b2b_invoice['id']
                 self.b2brouter_state = gettext(
                     'account_invoice_facturae_b2brouter.msg_b2brouter_state_' +
-                    response.json().get('invoice').get('state'))
+                    b2b_invoice['state'])
                 self.save()
             else:
                 self.b2brouter_state = gettext(
@@ -298,7 +299,13 @@ class Invoice(metaclass=PoolMeta):
                     error=str(e)))
 
         try:
-            if response.status_code == 204:
+            if response.status_code in (200, 201, 204):
+                if response.status_code != 204:
+                    b2b_invoice = response.json()['invoice']
+                    self.b2brouter_id = b2b_invoice['id']
+                    self.b2brouter_state = gettext(
+                        'account_invoice_facturae_b2brouter.'
+                        'msg_b2brouter_state_' + b2b_invoice['state'])
                 self.invoice_facturae_sent = True
                 self.save()
             else:
@@ -362,7 +369,7 @@ class Invoice(metaclass=PoolMeta):
 
         try:
             self.invoice_facturae = None
-            if response.status_code == 204:
+            if response.status_code in (200, 204):
                 self.b2brouter_id = None
                 self.b2brouter_state = None
                 self.b2brouter_message = None

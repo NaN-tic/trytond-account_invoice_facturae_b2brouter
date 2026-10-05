@@ -17,6 +17,7 @@ PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
 B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
+B2BROUTER_API_VERSION = '2025-10-13'
 B2BROUTER_BASEURL = ('https://api.b2brouter.net'
     if B2BROUTER_PRODUCTION else 'https://api-staging.b2brouter.net')
 
@@ -86,6 +87,7 @@ class Invoice(metaclass=PoolMeta):
             "accept": "application/json",
             "content-type": "application/octet-stream",
             "X-B2B-API-Key": B2BROUTER_API_KEY,
+            "X-B2B-API-Version": B2BROUTER_API_VERSION,
             }
 
         try:
@@ -178,6 +180,7 @@ class Invoice(metaclass=PoolMeta):
             headers = {
                 "accept": "application/json",
                 "X-B2B-API-Key": B2BROUTER_API_KEY,
+                "X-B2B-API-Version": B2BROUTER_API_VERSION,
                 }
 
             try:
@@ -232,6 +235,7 @@ class Invoice(metaclass=PoolMeta):
                 send_headers = {
                     "accept": "application/json",
                     "X-B2B-API-Key": B2BROUTER_API_KEY,
+                    "X-B2B-API-Version": B2BROUTER_API_VERSION,
                     }
                 try:
                     response = requests.get(send_url, headers=send_headers)
@@ -286,6 +290,7 @@ class Invoice(metaclass=PoolMeta):
             "accept": "application/json",
             "content-type": "application/octet-stream",
             "X-B2B-API-Key": B2BROUTER_API_KEY,
+            "X-B2B-API-Version": B2BROUTER_API_VERSION,
             }
 
         try:
@@ -355,6 +360,7 @@ class Invoice(metaclass=PoolMeta):
         headers = {
             "accept": "application/json",
             "X-B2B-API-Key": B2BROUTER_API_KEY,
+            "X-B2B-API-Version": B2BROUTER_API_VERSION,
             }
 
         try:

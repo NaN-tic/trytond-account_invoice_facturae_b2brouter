@@ -14,11 +14,10 @@ from trytond.model import fields, ModelView
 from trytond.transaction import Transaction
 
 PRODUCTION_ENV = config_.getboolean('database', 'production', default=False)
-B2BROUTER_PRODUCTION = config_.getboolean('b2brouter', 'production', default=False)
 B2BROUTER_ACCOUNT = config_.get('b2brouter', 'account', default=None)
 B2BROUTER_API_KEY = config_.get('b2brouter', 'key', default=None)
 B2BROUTER_BASEURL = ('https://app.b2brouter.net'
-    if B2BROUTER_PRODUCTION else 'https://app-staging.b2brouter.net')
+    if PRODUCTION_ENV else 'https://app-staging.b2brouter.net')
 
 _logger = getLogger(__name__)
 
